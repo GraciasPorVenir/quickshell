@@ -1,0 +1,13 @@
+module qs
+
+singleton PopupState singletons/PopupState.qml
+singleton Time singletons/Time.qml
+singleton BatteryManager singletons/BatteryManager.qml
+singleton BluetoothManager singletons/BluetoothManager.qml
+singleton VolumeManager singletons/VolumeManager.qml
+
+Bar widgets/Bar.qml
+Pill widgets/Pill.qml
+
+BatteryPopup widgets/BatteryPopup.qml
+BluetoothPopup widgets/BluetoothPopup.qml

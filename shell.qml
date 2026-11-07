@@ -1,6 +1,6 @@
-// shell.qml
 import Quickshell
+import qs
 
-Scope {
+ShellRoot {
     Bar {}
 }
