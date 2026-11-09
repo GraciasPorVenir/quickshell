@@ -1,13 +1,15 @@
 module qs
 
-singleton PopupState singletons/PopupState.qml
-singleton Time singletons/Time.qml
-singleton BatteryManager singletons/BatteryManager.qml
-singleton BluetoothManager singletons/BluetoothManager.qml
-singleton VolumeManager singletons/VolumeManager.qml
+singleton SPopup singletons/SPopup.qml
+singleton STime singletons/STime.qml
+singleton SBattery singletons/SBattery.qml
+singleton SBluetooth singletons/SBluetooth.qml
+singleton SVolume singletons/SVolume.qml
+singleton SIcon singletons/SIcon.qml
 
 Bar widgets/Bar.qml
 Pill widgets/Pill.qml
+SideMenu widgets/SideMenu.qml
 
 BatteryPopup widgets/BatteryPopup.qml
 BluetoothPopup widgets/BluetoothPopup.qml

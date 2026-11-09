@@ -1,39 +1,40 @@
 import Quickshell
 import QtQuick
-import Quickshell.Services.UPower
 import QtQuick.Layouts
 import QtQuick.Controls
 import qs
 
-PanelWindow {
-  implicitWidth: 300
-  implicitHeight: 500
-  ColumnLayout {
-    anchors.fill: parent
-    spacing: 5
+ColumnLayout {
+  RowLayout {
     Button {
-      text: "Buscar"
-      onClicked: {
-        BluetoothManager.toggleDiscover()
-      }
+      text: ""
+      enabled: !SBluetooth.adapter?.discovering
+      onClicked: SBluetooth.discover()
     }
+    Text { text: SBluetooth.adapter?.name }
+  }
 
-    Repeater {
-      model: BluetoothManager.defAdapter?.devices
-      delegate: Button {
-        id: devButton
-        Layout.fillWidth: true
-        required property var modelData
+  Repeater {
+    model: SBluetooth.adapter?.devices
+    delegate: RowLayout {
+      Layout.fillWidth: true
+      required property var modelData
+
+      Button {
         enabled: !modelData.pairing
-        text: `${modelData.pairing ? "..." : BluetoothManager.deviceIcon(modelData)} ${modelData.name}`
-        onClicked: {
-          BluetoothManager.connect(modelData)
+        onClicked: SBluetooth.connect(modelData)
+        contentItem: RowLayout {
+          Text { text: `${modelData.pairing ? "..." : SBluetooth.deviceIcon(modelData)}` }
+          Text { text: SBluetooth.fName(modelData) }
         }
-        Text {
-          text: `paired=${modelData.paired} bonded=${modelData.bonded} trusted=${modelData.trusted} conn=${modelData.connected}`
-          font.pixelSize: 10
-        } 
+      }
+
+      Button {
+        enabled: !modelData.pairing
+        text: SBluetooth.trustIcon(modelData)
+        onClicked: SBluetooth.toggleTrust(modelData)
       }
     }
   }
+  Item { Layout.fillHeight: true }
 }

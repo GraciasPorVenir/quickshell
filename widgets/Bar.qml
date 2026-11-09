@@ -81,36 +81,29 @@ Scope {
             spacing: 5
 
             Pill {
-              label.text: Time.hour
+              label.text: STime.hour
             }
             Pill {
               popup: "battery"
-              label.text: BatteryManager.icon
-              label.color: BatteryManager.color
-              tooltipText: `${BatteryManager.fPercentage} ${BatteryManager.fTime}`
+              label.text: SBattery.icon
+              label.color: SIcon.color(SBattery.battery.percentage)
+              tooltipText: `${SIcon.fPercentage(SBattery.battery.percentage)} ${SBattery.fTime}`
             }
             Pill {
               popup: "bluetooth"
-              label.text: BluetoothManager.adapterIcon()
+              label.color: SBluetooth.color
+              label.text: SBluetooth.adapterIcon
             }
             Pill {
-              label.text: VolumeManager.audioIcon
+              label.text: SVolume.audioIcon
             }
-            Item {
-              Layout.fillHeight: true
-            }
+            Item { Layout.fillHeight: true }
           }
         }
       }
-
-      BatteryPopup {
+      SideMenu{
         screen: screenScope.modelData
-        visible: PopupState.activePopup === "battery"
-      }
-
-      BluetoothPopup {
-        screen: screenScope.modelData
-        visible: PopupState.activePopup === "bluetooth"
+        visible: SPopup.popup !== ""
       }
     }
   }

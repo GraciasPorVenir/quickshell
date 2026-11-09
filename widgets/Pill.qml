@@ -8,6 +8,7 @@ Rectangle {
   property string popup: ""
   property string tooltipText: ""
   property alias label: text
+  property alias mouse_area: mouseArea
 
   implicitWidth: label.implicitWidth + 14
   implicitHeight: label.implicitHeight + 8
@@ -28,7 +29,7 @@ Rectangle {
     hoverEnabled: true
     cursorShape: Qt.PointingHandCursor
     onClicked: {
-      if (root.popup !== "") PopupState.toggle(root.popup);
+      if (root.popup !== "") SPopup.toggle(root.popup);
     }
   }
 
