@@ -6,16 +6,16 @@ import qs
 
 Singleton {
   id: root
-  readonly property PwNode activeNodeSink: Pipewire.defaultAudioSink
-  PwObjectTracker { objects: [root.activeNodeSink] }
+  readonly property PwNode activeNode: Pipewire.defaultAudioSink
+  PwObjectTracker { objects: [root.activeNode] }
 
-  readonly property PwNodeAudio audio: activeNodeSink.audio
-  readonly property real volume: audio.volume 
+  readonly property PwNodeAudio audio: activeNode ? activeNode.audio : null
+  readonly property real volume: audio ? audio.volume : 0.0 
   readonly property bool isMuted: audio ? audio.muted : false
-  readonly property bool isSink: activeNodeSink.isSink ?? true
+  readonly property bool isSink: activeNode ? activeNode.isSink ?? true : true
 
   readonly property string audioIcon: {
-    if (!activeNodeSink || !audio) return "";
+    if (!activeNode || !audio) return "";
     if (root.isMuted) return root.isSink ? "" : "󰍭";
     if (!root.isSink) return "󰍬";
     return SIcon.icon(["", "", "", ""], root.volume);
@@ -28,36 +28,4 @@ Singleton {
   function toggleMute() {
     if (root.audio) root.audio.muted = !root.audio.muted;
   }
-
-  property string pendingSink: ""
-
-  function setAudio(description) {
-    if (trySetSink(description)) return
-    pendingSink = description
-    retryTimer.restart()
-  }
-
-  function trySetSink(description) {
-    for (const n of Pipewire.nodes.values) {
-      if (n.isSink && n.audio && (n.description.includes(description) || n.name.includes(description))) {
-        Pipewire.preferredDefaultAudioSink = n
-        return true
-      }
-    }
-    return false
-  }
-
-Timer {
-  id: retryTimer
-  interval: 500
-  repeat: true
-  property int tries: 0
-  onTriggered: {
-    if (root.trySetSink(root.pendingSink) || ++tries > 10) {
-      stop();
-      tries = 0;
-      root.pendingSink = "";
-    }
-  }
-}
 }

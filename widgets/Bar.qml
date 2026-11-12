@@ -28,9 +28,7 @@ Scope {
         implicitWidth: barWidth + radius
         exclusiveZone: barWidth
 
-        mask: Region {
-          item: barArea
-        }
+        mask: Region { item: barArea }
 
         Item {
           id: root
@@ -80,22 +78,22 @@ Scope {
             height: parent.height - 10
             spacing: 5
 
+            Pill { label.text: STime.hour }
             Pill {
-              label.text: STime.hour
-            }
-            Pill {
-              popup: "battery"
+              leftFn: () => SPopup.toggle("battery")
               label.text: SBattery.icon
               label.color: SIcon.color(SBattery.battery.percentage)
-              tooltipText: `${SIcon.fPercentage(SBattery.battery.percentage)} ${SBattery.fTime}`
+              tooltip: `${SIcon.fPercentage(SBattery.battery.percentage)} ${SBattery.fTime}`
             }
             Pill {
-              popup: "bluetooth"
               label.color: SBluetooth.color
               label.text: SBluetooth.adapterIcon
+              leftFn: () => SHypr.openTUI("bluetui")
             }
             Pill {
               label.text: SVolume.audioIcon
+              rightFn: () => SHypr.openTUI("pulsemixer")
+              leftFn: () => SVolume.toggleMute()
             }
             Item { Layout.fillHeight: true }
           }

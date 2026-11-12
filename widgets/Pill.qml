@@ -5,10 +5,10 @@ import qs
 Rectangle {
   id: root
 
-  property string popup: ""
-  property string tooltipText: ""
   property alias label: text
-  property alias mouse_area: mouseArea
+  property string tooltip: ""
+  property var leftFn: null
+  property var rightFn: null
 
   implicitWidth: label.implicitWidth + 14
   implicitHeight: label.implicitHeight + 8
@@ -24,18 +24,21 @@ Rectangle {
 
   MouseArea {
     id: mouseArea
-    visible: Boolean(popup) || Boolean(tooltipText)
     anchors.fill: parent
     hoverEnabled: true
     cursorShape: Qt.PointingHandCursor
-    onClicked: {
-      if (root.popup !== "") SPopup.toggle(root.popup);
+    onClicked: function(mouse) {
+      const hasLeft = typeof root.leftFn === "function";
+      const hasRight = typeof root.rightFn === "function";
+      if (hasLeft && !hasRight) root.leftFn();
+      else if (hasRight && !hasLeft) root.rightFn();
+      else if (mouse.button === Qt.LeftButton && hasLeft) root.leftFn();
+      else if (mouse.button === Qt.RightButton && hasRight) root.rightFn();
     }
   }
 
   PopupWindow {
-    id: tooltipWindow
-    visible: root.tooltipText !== "" && mouseArea.containsMouse
+    visible: root.tooltip !== "" && mouseArea.containsMouse
     color: "transparent"
 
     anchor.item: root
@@ -44,12 +47,13 @@ Rectangle {
     Rectangle {
       color: "#000000"
       radius: 4
-      implicitWidth: tipText.implicitWidth + 12
-      implicitHeight: tipText.implicitHeight + 8
+      implicitWidth: tooltipText.implicitWidth + 12
+      implicitHeight: tooltipText.implicitHeight + 8
+      x: (root.implicitWidth / 2) * 1.2
 
       Text {
-        id: tipText
-        text: root.tooltipText
+        text: root.tooltip
+        id: tooltipText
         color: "#ffffff"
         font.pixelSize: 11
         anchors.centerIn: parent

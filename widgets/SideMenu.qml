@@ -26,7 +26,5 @@ PanelWindow {
       }
     }
   }
-
   Component { id: battery; BatteryPopup{} }
-  Component { id: bluetooth; BluetoothPopup{} }
 }
